@@ -1,39 +1,39 @@
-from fastapi import FastAPI , APIrouter
-from pybantic import BaseModel
+from fastapi import FastAPI , APIRouter
+from pydantic import BaseModel
 from typing import Optional
+from sql.database import get_connection
+from data_interactor import Datainteractor as d
 
 
-class Contact(BaseModel):
-    id: int 
+class Contact(BaseModel): 
+    id : Optional[int] = None
     firest_name: str
     last_name: str
     phone: str
 
-router = APIrouter()
+router = APIRouter()
 
 
 
 @router.get("/contacts")
 def get_all_contacts():
-    pass
-
+    return d.fetch_all_contacts()
 
 @router.get("/contacts/{contact_id}")
 def get_contact(contact_id: int):
-    pass
+    return d.fetch_contact_by_id(contact_id)
+
 
 @router.post("/contacts")
-def create_contact(contact: BaseModel):
-    new_contact = {"first_name": "John","last_name": "Doe","phone_number": "050-1234567"}
-        
-    return {"message": "Contact created successfully","contact id": new_contact["id"]}
-
+def create_contact(contact: Contact):
+    return d.add_contact(contact.firest_name, contact.last_name, contact.phone)
+    
 
 @router.put("/contacts/{contact_id}")
-def update_contact(contact_id: int, contact: BaseModel):
-    pass
+def update_contact(contact_id: int, contact: Contact):
+    return d.update_contact(contact_id, contact.firest_name, contact.last_name, contact.phone)
 
 @router.delete("/contacts/{contact_id}")
 def delete_contact(contact_id: int):
-    pass
+    return d.delete_contact(contact_id)
 
