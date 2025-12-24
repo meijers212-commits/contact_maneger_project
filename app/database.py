@@ -3,15 +3,17 @@ from mysql.connector import Error
 import os
 from dotenv import load_dotenv
 
+load_dotenv()
 
 def get_connection():
-    load_dotenv(dotenv_path="../sql/.env")
+
     try:
         connection = mysql.connector.connect(
-            host=os.getenv("HOST"),            
+            host=os.getenv("DB_HOST"),            
             user=os.getenv("DB_USER"),
             password=os.getenv("DB_PASSWORD"),
-            database=os.getenv("DATABASE")
+            database=os.getenv("DB_NAME"),
+            autocommit=True
         )
         return connection
     except Error as e:

@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-from app.api import router
+from api import router
 
 
 app = FastAPI()
-app.include_router(router, tags="CONTACT_MANEGER", prefix="/home")
+app.include_router(router, tags=["CONTACT_MANAGER"], prefix="/home")
 
 
 
