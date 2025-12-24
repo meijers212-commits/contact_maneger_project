@@ -12,6 +12,11 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       - ./sql:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   web:
     build: ./app
@@ -21,11 +26,15 @@ services:
       - "8000:8000"
     environment:
       DB_HOST: db
-      DB_USER: ${DB_USRE}
+      DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
+    
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+
+
 
 volumes:
   db_data:
