@@ -1,7 +1,7 @@
 from fastapi import FastAPI, APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional
-from app.contacthandeling import Contacthandeling
+from contacthandeling import Contacthandeling
 from data_interactor import Datainteractor
 
 
