@@ -1,7 +1,7 @@
 from fastapi import FastAPI, APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional
-from nir_project import Contact_for_nir
+from app.contacthandeling import Contacthandeling
 from data_interactor import Datainteractor
 
 
@@ -34,9 +34,10 @@ def get_contact(contact_id: int):
 @router.post("/contacts")
 def create_contact(contact: Contact):
     try:
-        d = Contact_for_nir.convert_to_dict(
-            contact.first_name, contact.last_name, contact.phone_number
+        cont = Contacthandeling(
+            None, contact.first_name, contact.last_name, contact.phone_number
         )
+        d = cont.convert_to_dict()
         return Datainteractor.add_contact(
             d["first_name"], d["last_name"], d["phone_number"]
         )
@@ -47,9 +48,10 @@ def create_contact(contact: Contact):
 @router.put("/contacts/{contact_id}")
 def update_contact(contact_id: int, contact: Contact):
     try:
-        d = Contact_for_nir.convert_to_dict(
+        cont = Contacthandeling(
             contact_id, contact.first_name, contact.last_name, contact.phone_number
         )
+        d = cont.convert_to_dict()
         return Datainteractor.update_contact(
             contact_id, d["first_name"], d["last_name"], d["phone_number"]
         )
